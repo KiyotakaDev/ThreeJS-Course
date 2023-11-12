@@ -24,6 +24,10 @@ const Scene = () => {
 
     currentMount.appendChild(renderer.domElement)
 
+    // Controls
+    const controls = new OrbitControls(camera, renderer.domElement)
+    // Damping
+    controls.enableDamping = true
 
     // Cube
     const cube = new THREE.Mesh(
@@ -40,6 +44,14 @@ const Scene = () => {
     sphere.position.x = 1
     scene.add(sphere)
 
+    // Render the scene
+    const animate = () => {
+      // update for damping
+      controls.update()
+      renderer.render(scene, camera)
+      requestAnimationFrame(animate)
+    }
+    animate()
 
     // Scene clean up
     return () => {

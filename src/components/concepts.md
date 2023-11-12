@@ -66,3 +66,58 @@ The whole set up is going to be based in 2 hooks: **useEffect** and **useRef**.
         }
       }, [])
     ```
+
+## Orbit controls
+
+The orbit controls allow us to move around a point in the scene and zoom in or zoom out
+
+### steps
+
+1. Import OrbitControls
+
+    `import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'`
+
+2. Create controls
+
+    ```
+      // Renderer
+      ...
+
+      // Controls
+      const controls = new OrbitControls(camera, renderer.domElement)
+    ```
+
+3. Give frames to our renderer for sense of movement
+
+    ```
+      // Render the scene
+      const animate = () => {
+        renderer.render(scene, camera)
+        requestAnimationFrame(animate)
+      }
+      animate()
+    ```
+
+4. If we want the damping effect in our scene
+
+    ```
+      // Renderer
+      ...
+
+      // Controls
+      const controls = new OrbitControls(camera, renderer.domElement)
+      // enable damping effect
+      controls.enableDamping = true
+
+      // Cube
+      ...
+
+      // Render the scene
+      const animate = () => {
+        // update controls for damping
+        controls.update()
+        renderer.render(scene, camera)
+        requestAnimationFrame(animate)
+      }
+      animate()
+    ```

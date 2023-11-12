@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { cube, sphere, torusKnot } from '../materials/Geo'
-import { cubeTextr, sphereTextr } from '../textures/Textr'
+import { sphereTextr } from '../textures/Textr'
 import { envMap } from '../lights/Lights'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 const Scene = () => {
   const mountRef = useRef(null)
@@ -29,15 +29,21 @@ const Scene = () => {
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement)
+    controls.target.y = 1.5
     // Damping
     controls.enableDamping = true
+
+    // Loader
+    const gltfLoader = new GLTFLoader()
+    gltfLoader.load('./model/amongus.gltf',
+      (gltf) => {
+        scene.add(gltf.scene)
+      },
+    )
 
     // Ligth
     scene.environment = envMap
     scene.background = envMap
-
-    // Texture
-    scene.add(sphereTextr)
 
     // Render the scene
     const animate = () => {

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { cube, sphere, torusKnot } from '../materials/Geo'
 
 const Scene = () => {
   const mountRef = useRef(null)
@@ -15,7 +16,7 @@ const Scene = () => {
       0.1,
       1000,
     )
-    camera.position.z = 4
+    camera.position.z = 8
     scene.add(camera)
 
     // Renderer
@@ -29,20 +30,9 @@ const Scene = () => {
     // Damping
     controls.enableDamping = true
 
-    // Cube
-    const cube = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1,),
-      new THREE.MeshBasicMaterial()
-    )
-    cube.position.x = -1
-    scene.add(cube)
-    // Sphere
-    const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(0.5, 16, 16),
-      new THREE.MeshBasicMaterial()
-    )
-    sphere.position.x = 1
-    scene.add(sphere)
+    // Geometries
+    scene.add(cube, sphere, torusKnot)
+    
 
     // Render the scene
     const animate = () => {

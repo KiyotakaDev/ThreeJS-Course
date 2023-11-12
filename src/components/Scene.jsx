@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { cube, sphere, torusKnot } from '../materials/Geo'
 import { cubeTextr, sphereTextr } from '../textures/Textr'
+import { envMap } from '../lights/Lights'
 
 const Scene = () => {
   const mountRef = useRef(null)
@@ -16,14 +17,14 @@ const Scene = () => {
       currentMount.clientWidth / currentMount.clientHeight,
       0.1,
       1000,
+      
     )
     camera.position.z = 8
     scene.add(camera)
 
     // Renderer
-    const renderer = new THREE.WebGLRenderer()
+    const renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.setSize(currentMount.clientWidth, currentMount.clientHeight)
-
     currentMount.appendChild(renderer.domElement)
 
     // Controls
@@ -31,14 +32,12 @@ const Scene = () => {
     // Damping
     controls.enableDamping = true
 
-    // Ligths
-    const al = new THREE.AmbientLight(0xffffff, 1)
+    // Ligth
+    scene.environment = envMap
+    scene.background = envMap
 
-    // Geometries
-    // scene.add(cube, sphere, torusKnot)
     // Texture
-    scene.add(al, sphereTextr)
-    
+    scene.add(sphereTextr)
 
     // Render the scene
     const animate = () => {

@@ -60,7 +60,7 @@ The whole set up is going to be based in 2 hooks: **useEffect** and **useRef**.
         renderer.render(scene, camera)
 
         // At this point we'll be facing a problem: multiple canvases will be rendering
-        // To solve that we use retunr of useEffect()
+        // To solve that we use retunr of useEffect() (Render clean up)
         return () => {
           currentMount.removeChild(renderer.domElement)
         }

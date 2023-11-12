@@ -24,8 +24,6 @@ const Scene = () => {
 
     currentMount.appendChild(renderer.domElement)
 
-    // Contronls
-    const controls = new OrbitControls(camera, renderer.domElement)
 
     // Cube
     const cube = new THREE.Mesh(
@@ -42,13 +40,6 @@ const Scene = () => {
     sphere.position.x = 1
     scene.add(sphere)
 
-    // Render the scene
-    const animate = () => {
-      controls.update()
-      renderer.render(scene, camera)
-      requestAnimationFrame(animate)
-    }
-    animate()
 
     // Scene clean up
     return () => {

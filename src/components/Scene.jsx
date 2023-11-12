@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { cube, sphere, torusKnot } from '../materials/Geo'
-import { textrSphere } from '../textures/Textr'
+import { cubeTextr, sphereTextr } from '../textures/Textr'
 
 const Scene = () => {
   const mountRef = useRef(null)
@@ -31,10 +31,13 @@ const Scene = () => {
     // Damping
     controls.enableDamping = true
 
+    // Ligths
+    const al = new THREE.AmbientLight(0xffffff, 1)
+
     // Geometries
     // scene.add(cube, sphere, torusKnot)
     // Texture
-    scene.add(textrSphere)
+    scene.add(al, sphereTextr)
     
 
     // Render the scene

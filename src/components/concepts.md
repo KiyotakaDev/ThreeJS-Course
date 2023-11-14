@@ -144,3 +144,15 @@ The orbit controls allow us to move around a point in the scene and zoom in or z
       },
     )
     ```
+
+## Resize 
+
+    ```
+      // Resize
+      const resize = () => {
+        renderer.setSize(currentMount.clientWidth, currentMount.clientHeight)
+        camera.aspect = currentMount.clientWidth / currentMount.clientHeight
+        camera.updateProjectionMatrix()
+      }
+      window.addEventListener('resize', resize)
+    ```

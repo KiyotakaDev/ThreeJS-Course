@@ -1,0 +1,16 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #202020;
+  color: #fff;
+}
+
+.container3D {
+  height: 100vh;
+  width: 100%;
+  background-color: #303030;
+}

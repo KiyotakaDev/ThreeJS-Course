@@ -1,20 +1,18 @@
-import React, { useEffect, useRef } from 'react'
-import { cleanUpScene, initScene } from './Script'
+import React, { useEffect, useRef } from "react";
+import { cleanUpScene, initScene } from "./Script";
 
 const Scene = () => {
-  const mountRef = useRef()
+  const mountRef = useRef();
 
   useEffect(() => {
-    initScene(mountRef)
+    initScene(mountRef);
 
     return () => {
-      cleanUpScene()
-    }
-  }, [])
+      cleanUpScene();
+    };
+  }, []);
 
-  return (
-    <div ref={mountRef} className='container3D'></div>
-  )
-}
+  return <div ref={mountRef} className="container3D"></div>;
+};
 
-export default Scene
+export default Scene;

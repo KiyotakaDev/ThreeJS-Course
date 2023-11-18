@@ -30,10 +30,22 @@ const animate = () => {
 };
 animate();
 
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-const boxMaterial = new THREE.MeshBasicMaterial();
-const box = new THREE.Mesh(boxGeometry, boxMaterial);
-scene.add(box);
+const planeMaterial = new THREE.ShaderMaterial({
+  vertexShader: `
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    void main() {
+      gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
+    }
+  `
+});
+
+const planeGeometry = new THREE.PlaneGeometry(1, 2);
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+scene.add(plane);
 
 const mountScene = (mountRef) => {
   currentRef = mountRef.current;

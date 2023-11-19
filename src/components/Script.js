@@ -1,12 +1,12 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { plane } from '../shaders/BasicTextureShader'
+import { plane } from '../shaders/ComplexTextrShadr'
 
 let currentRef = null;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(25, 100 / 100, 1, 100);
-camera.position.set(5, 5, 5);
+camera.position.set(10, 10, 10);
 camera.lookAt(new THREE.Vector3());
 scene.add(camera);
 

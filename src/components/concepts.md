@@ -12,7 +12,7 @@ To work with shaders we will work with the material "ShaderMaterial".
 
 1. Create geometry with "ShaderMaterial"
 
-   ```ruby
+   ```javascript
      const planeGeometry = new THREE.PlaneGeometry(1, 2);
      const planeMaterial = new THREE.ShaderMaterial();
      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -24,7 +24,7 @@ To work with shaders we will work with the material "ShaderMaterial".
 
 `void main() {}`
 
-    ```ruby
+    ```javascript
       const planeMaterial = new THREE.ShaderMaterial({
         vertexShader: ``,
         fragmentShader: ``,
@@ -37,7 +37,7 @@ To work with shaders we will work with the material "ShaderMaterial".
 - modelViewMatrix
 - vec4(position, 1.0)
 
-  ```ruby
+  ```javascript
     vertexShader: `
       void main() {
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
@@ -47,7 +47,7 @@ To work with shaders we will work with the material "ShaderMaterial".
 
 4. Principal component of vertexShader "gl_FragColor" is a vec4 = rgba
 
-   ```ruby
+   ```javascript
      fragmentShader: `
        void main() {
          gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
@@ -61,7 +61,7 @@ To work with shaders we will work with the material "ShaderMaterial".
 
 - In this case we take the `vec4 modelPosition = modelViewMatrix * vec4(position, 1.0);` so we can modify the position of the model in the scene.
 
-  ```ruby
+  ```javascript
     vertexShader: `
       void main() {
         vec4 modelPosition = modelviewMatrix * vec4(position, 1.0);
@@ -79,7 +79,7 @@ To work with shaders we will work with the material "ShaderMaterial".
 - The \* 0.4 is the amplitude.
 - We create a variable `varying float vElevation` which is used to pass values generally from vertex to fragment.
 
-  ```ruby
+  ```javascript
     vertexShader: `
       varying float vElevation;
 
@@ -106,7 +106,7 @@ To work with shaders we will work with the material "ShaderMaterial".
   - a: Specify the value to use to interpolate between x and y.
 - Use of varying float vElevation into mix() func.
 
-  ```ruby
+  ```javascript
     fragmentShader: `
       varying float vElevation;
 
@@ -124,7 +124,7 @@ To work with shaders we will work with the material "ShaderMaterial".
 
 - Sum the amplitude to the elevation to prevent negative values and make a better sampling of mix color.
 
-    ```ruby
+    ```javascript
     const planeMaterial = new THREE.ShaderMaterial({
       side: THREE.DoubleSide, // <--
       vertexShader: `
@@ -141,4 +141,85 @@ To work with shaders we will work with the material "ShaderMaterial".
         }
       `
     });
+    ```
+
+5. Use of `uniforms`. They are values ​​that we can pass either to the vertex or to the fragment
+
+- Declare uniform variables:
+
+    ```javascript
+      const planeMaterial = new THREE.ShaderMaterial({
+        side: THREE.DoubleSide,
+        uniforms: {
+          uTime: {
+            value: 0.0,
+          },
+          uColorA: {
+            value: new THREE.Color("#eb1bd2")
+          },
+          uColorB: {
+            value: new THREE.Color("#26b3e3")
+          },
+          uIntensity: {
+            value: 3.0
+          },
+          uOffset: {
+            value: 1.0
+          }
+        },
+        vertexShader: ``
+      })
+    ```
+
+- Get the value of the variable uTime from `uniform float uTime;`
+
+    ```javascript
+      vertexShader: `
+        varying float vElevation;
+
+        uniform float uTime;
+  
+        void main() {
+          vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+            modelPosition.y += sin(modelPosition.x * 4.0 + uTime) * 0.4;
+            modelPosition.y += sin(modelPosition.z * 6.0 + uTime) * 0.2;
+            
+            vElevation = modelPosition.y;
+            
+            gl_Position = projectionMatrix * viewMatrix * modelPosition;
+          }
+          `,
+    ```
+
+- In the animation() update the uTime.value every frame.
+
+    ```javascript
+      const animate = () => {
+        planeMaterial.uniforms.uTime.value += 0.03 // <---
+
+        orbitControls.update();
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      };
+      animate();
+    ```
+  
+- Use of the rest of the uniform variables.
+
+    ```javascript
+      fragmentShader: `
+        varying float vElevation;
+
+        uniform vec3 uColorA;
+        uniform vec3 uColorB;
+        uniform float uIntensity;
+        uniform float uOffset;
+        
+        void main() {
+          vec3 mixedColor = mix(uColorA, uColorB, vElevation * uIntensity + uOffset);
+          
+          
+          gl_FragColor = vec4(mixedColor, 1.0);
+        }
+        `,
     ```

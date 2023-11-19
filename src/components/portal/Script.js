@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { plane } from '../shaders/ComplexTextrShadr'
+import { plane } from "../portal/Portal";
 
 let currentRef = null;
 
@@ -23,7 +23,6 @@ const resize = () => {
   camera.updateProjectionMatrix();
 };
 window.addEventListener("resize", resize);
-
 
 scene.add(plane);
 

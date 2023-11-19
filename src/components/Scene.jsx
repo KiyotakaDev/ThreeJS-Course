@@ -1,21 +1,18 @@
-import { useEffect, useRef } from 'react'
-import { mountScene, unmountScene } from './Script'
+import { useEffect, useRef } from "react";
+import { mountScene, unmountScene } from "./portal/Script";
 
 const Scene = () => {
-  const mountRef = useRef()
+  const mountRef = useRef();
 
   useEffect(() => {
-    mountScene(mountRef)
-  
+    mountScene(mountRef);
+
     return () => {
-      unmountScene()
-    }
-  }, [])
-  
+      unmountScene();
+    };
+  }, []);
 
-  return (
-    <div className='container3D' ref={mountRef} />
-  )
-}
+  return <div className="container3D" ref={mountRef} />;
+};
 
-export default Scene
+export default Scene;

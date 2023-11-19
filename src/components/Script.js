@@ -31,21 +31,46 @@ const animate = () => {
 animate();
 
 const planeMaterial = new THREE.ShaderMaterial({
+  side: THREE.DoubleSide,
   vertexShader: `
+    varying float vElevation;
+
     void main() {
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+      float elevation = sin(modelPosition.x * 4.0) * 0.4;
+      modelPosition.y += (elevation + 0.4);
+
+      vElevation = modelPosition.y;
+
+      gl_Position = projectionMatrix * viewMatrix * modelPosition;
     }
   `,
   fragmentShader: `
+    varying float vElevation;
+
     void main() {
-      gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
+      vec4 red = vec4(1.0, 0.0, 0.0, 1.0);
+      vec4 blue = vec4(0.0, 0.0, 1.0, 1.0);
+      vec4 mixedColor = mix(red, blue, vElevation);
+
+
+      gl_FragColor = mixedColor;
     }
-  `
+  `,
 });
 
-const planeGeometry = new THREE.PlaneGeometry(1, 2);
+const planeGeometry = new THREE.PlaneGeometry(5, 2, 255, 255);
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+plane.rotation.x = Math.PI * -0.5;
 scene.add(plane);
+
+// Axes helper
+const axesHelper = new THREE.AxesHelper(5);
+scene.add(axesHelper);
+
+// Grid helper
+const gridHelper = new THREE.GridHelper(10, 10);
+scene.add(gridHelper);
 
 const mountScene = (mountRef) => {
   currentRef = mountRef.current;
